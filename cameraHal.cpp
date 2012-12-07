@@ -451,6 +451,9 @@ CameraHAL_FixupParams(android::CameraParameters &settings)
    const char *preview_frame_rates  = "30,27,24,15";
    const char *preferred_frame_rate = "15";
    const char *frame_rate_range     = "(15,30)";
+   // Deduced manually using the Liquid E camera sensor
+   float h_view_angle     = 50.82;
+   float v_view_angle     = 38.58;
 
    settings.set(android::CameraParameters::KEY_VIDEO_FRAME_FORMAT,
                 android::CameraParameters::PIXEL_FORMAT_YUV420SP);
@@ -488,6 +491,17 @@ CameraHAL_FixupParams(android::CameraParameters &settings)
       LOGD("Setting KEY_PREVIEW_FPS_RANGE: %s\n", frame_rate_range);
       settings.set(android::CameraParameters::KEY_SUPPORTED_PREVIEW_FPS_RANGE,
                    frame_rate_range);
+   }
+
+   // Panorama mode
+   if (settings.getFloat(android::CameraParameters::KEY_HORIZONTAL_VIEW_ANGLE) == -1) {
+      settings.setFloat(android::CameraParameters::KEY_HORIZONTAL_VIEW_ANGLE,
+                   h_view_angle);
+   }
+
+   if (settings.getFloat(android::CameraParameters::KEY_VERTICAL_VIEW_ANGLE) == -1) {
+      settings.setFloat(android::CameraParameters::KEY_VERTICAL_VIEW_ANGLE,
+                   v_view_angle);
    }
 }
 
